@@ -67,7 +67,7 @@ public class ECommerce_System {
         for (CartItem item : cart.getItems()) {
             System.out.println(item.getQuantity() + "x " +
                     item.getProduct().getName() + "\t" +
-                    item.getSubtotal());
+                    item.getSubtotal() + "$");
         }
         System.out.println("----------------------");
         System.out.println("Subtotal\t" + subtotal + "$");
