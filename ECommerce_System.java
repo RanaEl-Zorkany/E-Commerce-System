@@ -12,7 +12,7 @@ public class ECommerce_System {
         }
 
         double subtotal = 0;
-        List<Shippable> shippableItems = new ArrayList<>();
+        List<Product> shippableItems = new ArrayList<>();
 
         for (CartItem item : cart.getItems()) {
             Product product = item.getProduct();
@@ -33,18 +33,9 @@ public class ECommerce_System {
 
         for (CartItem item : cart.getItems()) {
             if (item.getProduct().requiresShipping()) {
-                Shippable shippableItem = new Shippable() {
-                    @Override
-                    public String getName() {
-                        return item.getQuantity() + "x " + item.getProduct().getName();
-                    }
-
-                    @Override
-                    public double getWeight() {
-                        return item.getProduct().getWeight() * item.getQuantity();
-                    }
-                };
-                shippableItems.add(shippableItem);
+                for (int i = 0; i < item.getQuantity(); i++) {
+                    shippableItems.add(item.getProduct());
+                }
             }
         }
 
@@ -79,10 +70,10 @@ public class ECommerce_System {
     }
 
     public static void main(String[] args) {
-        Product cheese = new Product("Cheese", 100.0, 10, LocalDate.of(2030, 1, 1), 0.2);
-        Product biscuit = new Product("Biscuits", 150.0, 5, LocalDate.of(2030, 1, 1), 0.7);
-        Product tv = new Product("TV", 2000.0, 3, null, 20.0);
-        Product scratchCard = new Product("Scratch Card", 10.0, 100, null, null);
+        Product cheese = new ShippableExpirableProduct("Cheese", 100.0, 10, LocalDate.of(2030, 1, 1), 0.2);
+        Product biscuit = new ShippableExpirableProduct("Biscuits", 150.0, 5, LocalDate.of(2030, 1, 1), 0.7);
+        Product tv = new ShippableProduct("TV", 2000.0, 3, 20.0);
+        Product scratchCard = new Product("Scratch Card", 10.0, 100);
 
         // CASE 1: SUCCESSFULL CHECKOUT
         Customer customer = new Customer(10000.0);
@@ -119,7 +110,7 @@ public class ECommerce_System {
 
         // CASE 5: EXPIRED PRODUCT
         Customer customer5 = new Customer(10000.0);
-        Product expiredCheese = new Product("Cheese", 100.0, 10, LocalDate.of(2020, 1, 1), 0.2);
+        Product expiredCheese = new ShippableExpirableProduct("Cheese", 100.0, 10, LocalDate.of(2020, 1, 1), 0.2);
         Cart cart5 = customer5.getCart();
         cart5.addItem(expiredCheese, 4);
 
